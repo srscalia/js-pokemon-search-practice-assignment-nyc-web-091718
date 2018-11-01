@@ -25,12 +25,9 @@ search.
 
 - A user should be able to search for a Pokemon and flip that Pokemon card to see its alternate sprite.
 
-- Two files containing the same information are included: `db.json` and `pokemon.js`. If you've learned `fetch`,
-  consider using `json-server` to spin up a simple RESTful API that will give you your pokemon data:
-  - `$ npm install -g json-server`
-  - `$ json-server --watch db.json`
-
-- If you aren't yet familiar with `fetch`, don't worry. We've included the same data in a file called `pokemon.js`. You should see the `POKEMON` `console.log`ged when you start this app.
+- Our "server" is being faked with a package called [json-server](https://github.com/typicode/json-server). This package uses a local file, `db.json` to spin up a RESTful JSON API in about 30 seconds. To run your server:
+  - `$ npm install -g json-server` this will install the node package (similar to a gem) globally `-g` on your machine
+  - `$ json-server --watch db.json` this spins up the server, it will default to `localhost:3000`
 
 ---
 
@@ -42,10 +39,5 @@ search.
 1.  AS A BONUS, add a way to show users details for a particular pokemon: moves, abilities, etc.
 
 ---
-
-### Constructors and Prototypes (feel free to use either ES5 or ES6)
-
-**Note** When creating constructors and prototypes, you may use ES6 classes or just create the constructor function
-separately. Your choice.
 
 ![](https://media.giphy.com/media/HZpCCbcWc0a3u/giphy.gif)
