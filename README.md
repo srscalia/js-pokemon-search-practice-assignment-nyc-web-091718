@@ -43,6 +43,25 @@ search.
 
 ---
 
+## Sample Markdown
+
+- We've also included a sample of the HTML that you can use to style your pokemon cards:
+
+```html
+<div class="pokemon-container">
+  <div style="width:230px;margin:10px;background:#fecd2f;color:#2d72fc" class="pokemon-frame">
+    <h1 class="center-text">ivysaur</h1>
+    <div style="width:239px;margin:auto">
+      <div style="width:96px;margin:auto">
+        <img data-id="2" data-action="flip" class="toggle-sprite" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/2.png">
+      </div>
+    </div>
+  </div>
+</div>
+```
+
+---
+
 ### Constructors and Prototypes (feel free to use either ES5 or ES6)
 
 **Note** When creating constructors and prototypes, you may use ES6 classes or just create the constructor function
