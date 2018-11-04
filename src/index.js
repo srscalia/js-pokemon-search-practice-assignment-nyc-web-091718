@@ -1,59 +1,66 @@
-//Deliverables:
-//- Implement a filter functionality for your Pokemon list.
-
-// - Implement a flip functionality on each Pokemon.
-
-// - Your search should include pokemon whose names are not exact matches
-
-// - AS A BONUS, add a way to show users details for a particular pokemon: moves, abilities, etc.
-
-
 document.addEventListener('DOMContentLoaded', () => {
-  // pokemon container
-  const containerToWhichWeAppend = document.getElementById('pokemon-container')
-  // fetch the json server
-  fetch('http://localhost:3000/pokemon', {
-    method: 'GET'
-    }).then(function(response) {
-      //parse the JSON from the HTTP response obj
-      return response.json()
-    }).then(function(parsedJSON){
-      pokeHash = parsedJSON;
-      // add a listener to each
-      //Iterate through the array, grab the elements that we want to render on the page
-      pokeHash.forEach(function(poke){
-        // const imageBack = poke.sprites.back
-        const image = poke.sprites.front
-        //call append function within the iteration
-        appendPokeToDom(poke, image)
-    }) // end of then methods
+  let pokemon = []
+  const pokemonContainer = document.getElementById('pokemon-container')
+  const searchInput = document.getElementById('pokemon-search-input')
 
-      // find the parent element container
-      const parent = document.getElementById('pokemon-container')
-      parent.addEventListener('click', function(event) {
-        const thing = event.target
-        if (thing.localName === 'img') {
-          const id = thing.dataset.id
-          if (thing.src.includes("back")) {
-            thing.src = pokeHash[id-2].sprites.front
+  fetch('http://localhost:3000/pokemon')
+    .then((objectResponse) =>
+      objectResponse.json())
+      .then((pokemonJSON) => {
+        pokemon = pokemonJSON
+        pokemon.forEach((poke) => {
+          pokemonContainer.innerHTML+=`
+          <div class="pokemon-container">
+            <div style="width:230px;margin:10px;background:#fecd2f;color:#2d72fc" class="pokemon-frame">
+              <h1 class="center-text">${poke.name}</h1>
+              <div style="width:239px;margin:auto">
+                <div style="width:96px;margin:auto">
+                  <img data-id='${poke.id}' data-action="flip" class="toggle-sprite" src="${poke.sprites.front}">
+                </div>
+              </div>
+            </div>
+          </div>`
+        }) // end of for each
+
+      }) // end of fetch
+      pokemonContainer.addEventListener('click', (event)=> {
+        if (event.target.localName === 'img') {
+          const id = event.target.dataset.id
+          const foundPoke = pokemon.find((poke)=>{
+            return poke.id == id;
+          }) //end of the foundPoke
+          if (event.target.src ===`${foundPoke.sprites.front}`) {
+            event.target.src = `${foundPoke.sprites.back}`
           } else {
-            thing.src = pokeHash[id-2].sprites.back
-          } // end of nested if statement to check if link is front or back
-        } // end of if statement to check make sure the click listener can target just images
-      }) // end of parent addEventListener
+            event.target.src = `${foundPoke.sprites.front}`
+          }
+
+        } // end of if statement
+      })// end of click event listener for photo flips
+
+      searchInput.addEventListener('input', (event)=> {
+        const searchValue = event.target.value;
+        let filteredPokemon = pokemon.filter(poke =>
+          poke.name.includes(searchValue)) // end of filteredPokemon
+        pokemonContainer.innerHTML = renderAllPokemon(filteredPokemon)
+      }) // end of click event listener for search input
+
+      const renderAllPokemon = (pokemonArray) => {
+        return pokemonArray.map((pokemon) => {
+          return `
+          <div class="pokemon-container">
+            <div style="width:230px;margin:10px;background:#fecd2f;color:#2d72fc" class="pokemon-frame">
+              <h1 class="center-text">${pokemon.name}</h1>
+              <div style="width:239px;margin:auto">
+                <div style="width:96px;margin:auto">
+                  <img name="flip" data-id="${pokemon.id}" data-action="flip" class="toggle-sprite" src="${pokemon.sprites.front}">
+                </div>
+              </div>
+            </div>
+          </div>
+          `
+        }).join('') //map returns an array. we want to use a STRING to update our div's innerHTML. ['h', 'e', 'l', 'l', 'o'].join('') -> 'hello'
+      }
+
 
 })
-  //Function to append HTML to which we are appending
-    function appendPokeToDom(poke, image) {
-      containerToWhichWeAppend.innerHTML += `<div class="pokemon-container"><div style="width:230px;margin:10px;background:#fecd2f;color:#2d72fc" class="pokemon-frame">
-        <h1 class="center-text">${poke.name}</h1>
-        <div style="width:239px;margin:auto">
-          <div style="width:96px;margin:auto">
-            <img data-id=${poke.id} data-action="flip" class="toggle-sprite" src=${image}>
-          </div>
-        </div>
-      </div>
-      </div>`
-    } // end of the appendPokeToDom function
-
-}) //End of the document end of listening for content load
